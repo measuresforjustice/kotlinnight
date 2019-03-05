@@ -35,7 +35,8 @@ class LibraryController:Controller() {
 
 	fun checkout( book:Book ): Checkout {
 		val checkout = inventory.checkout(book, LocalDate.now().plusDays(10))
-		loadBooks()
+		books.find { it.title == book.title }!!
+				.updateCheckouts( inventory.getCheckouts(book.title.isbn) )
 		loadCheckouts()
 		return checkout
 	}

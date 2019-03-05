@@ -1,9 +1,9 @@
 package io.mfj.kotlinnight.library.gui
 
 import io.mfj.kotlinnight.library.*
+
 import javafx.beans.property.IntegerProperty
-import javafx.beans.property.SimpleStringProperty
-import javafx.beans.property.StringProperty
+
 import tornadofx.*
 
 class GBook( val title:Title, val checkouts:MutableMap<Book,Checkout?> ) {
@@ -11,7 +11,7 @@ class GBook( val title:Title, val checkouts:MutableMap<Book,Checkout?> ) {
 	val bookTitle = title.title
 	val author = title.author
 
-	var availableProperty:IntegerProperty = calcAvailable().toProperty()
+	val availableProperty:IntegerProperty = calcAvailable().toProperty()
 	val available by availableProperty
 
 	fun updateCheckouts( checkouts:Map<Book,Checkout?> ) {
