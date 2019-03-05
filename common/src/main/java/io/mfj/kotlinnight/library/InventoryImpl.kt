@@ -1,6 +1,4 @@
-package io.mfj.kotlinnight.library.web
-
-import io.mfj.kotlinnight.library.*
+package io.mfj.kotlinnight.library
 
 import kotlin.concurrent.thread
 

@@ -1,7 +1,6 @@
 package io.mfj.kotlinnight.library.web.javalin
 
-import io.mfj.kotlinnight.library.web.Inventory
-import io.mfj.kotlinnight.library.web.InventoryImpl
+import io.mfj.kotlinnight.library.*
 
 import java.time.LocalDate
 

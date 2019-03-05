@@ -1,12 +1,12 @@
 package io.mfj.kotlinnight.library.web.ktor
 
-import io.mfj.kotlinnight.library.web.Inventory
-import io.mfj.kotlinnight.library.web.InventoryImpl
+import io.mfj.kotlinnight.library.*
 
 import java.time.LocalDate
 
 import io.ktor.application.*
 import io.ktor.features.*
+import io.ktor.http.content.*
 import io.ktor.jackson.jackson
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -37,6 +37,11 @@ object KtorApp {
 			install(InventoryProvider)
 
 			routing {
+
+				static("/") {
+					staticBasePackage = "static"
+					defaultResource("index.html")
+				}
 
 				get("/title/") {
 					call.respond( inventory.getTitles() )
@@ -78,7 +83,7 @@ object KtorApp {
 				put("/checkin", Controller.checkin)
 			}
 
-		}
+		}.start(wait=true)
 
 	}
 }
