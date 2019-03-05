@@ -12,4 +12,5 @@ dependencies {
   compile("io.ktor:ktor-server-core:1.1.2")
   compile("io.ktor:ktor-server-jetty:1.1.2")
   compile("io.ktor:ktor-jackson:1.1.2")
+  compile("io.ktor:ktor-auth:1.1.2")
 }
