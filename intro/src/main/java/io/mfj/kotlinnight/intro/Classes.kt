@@ -154,11 +154,23 @@ open class Sword: Item { // implementing an interface is about how you'd expect.
 	}
 }
 
-sealed class SpecialSword:Sword()
-// sealed means can only extend from within this file.
+enum class Color { Red, Blue, Green }
 
-class SpecialSwordA:SpecialSword()
-class SpecialSwordB:SpecialSword()
+sealed class SpecialSword(val color:Color):Sword() {
+	// sealed means can only extend from within this file.
+
+	override fun toString() =
+			when ( color ) {
+				Color.Red -> "red sword"
+				Color.Blue -> "blue sword"
+				else -> "some color sword"
+			}
+
+}
+
+class SpecialRedSword:SpecialSword(Color.Red)
+class SpecialBlueSword:SpecialSword(Color.Blue)
+class SpecialGreenSword:SpecialSword(Color.Green)
 
 /* You may have noticed that we declared several classes here,
 none of which were called Classes. That's totally allowed.
