@@ -11,6 +11,7 @@ import io.javalin.Javalin
 import io.javalin.NotFoundResponse
 import io.javalin.apibuilder.ApiBuilder
 import io.javalin.apibuilder.ApiBuilder.*
+import io.javalin.json.JavalinJackson
 import io.javalin.security.Role
 
 import org.eclipse.jetty.server.Server
@@ -29,6 +30,8 @@ object JavalinApp {
 
 		val port = System.getenv()["PORT"]?.toInt() ?: 4567
 		val host = System.getenv()["HOST"] ?: "127.0.0.1"
+
+		JavalinJackson.configure( configuredObjectMapper() )
 
 		Javalin
 				.create()
@@ -51,7 +54,6 @@ object JavalinApp {
 				.enableStaticFiles("/static")
 				.apply {
 					this.attribute(Inventory::class.java, InventoryImpl)
-
 				}
 				.accessManager { handler, ctx, permittedRoles ->
 					if ( permittedRoles.isEmpty() ) {
@@ -61,10 +63,10 @@ object JavalinApp {
 						val matchingRoles = permittedRoles.filter { permittedRole -> roles.contains( permittedRole ) }
 
 						if ( matchingRoles.isNotEmpty() ) {
-							log.debug( "User ${ctx.user?.name ?: "<none>"} has matching roles ${matchingRoles.joinToString(",")}" )
+							log.info( "User ${ctx.user?.name ?: "<none>"} has matching roles ${matchingRoles.joinToString(",")}" )
 							handler.handle(ctx)
 						} else {
-							log.debug( "User ${ctx.user?.name ?: "<none>"} does not have any of ${permittedRoles.joinToString(",")}" )
+							log.warn( "User ${ctx.user?.name ?: "<none>"} does not have any of ${permittedRoles.joinToString(",")}" )
 							ctx.status(403)
 									.result("Unauthorized")
 						}
@@ -105,8 +107,14 @@ object JavalinApp {
 					}
 					post("/book/:id/checkout",LibraryRole.Checkout) { ctx ->
 						val id = ctx.pathParam("id").toInt()
+						val dueDate = ctx.formParamMap()["due"]
+								?.firstOrNull()
+								?.let { s ->
+									LocalDate.parse( s, dateFormatter )
+								}
+								?: LocalDate.now().plusDays(10)
 						val book = ctx.inventory.getBook(id) ?: throw NotFoundResponse()
-						ctx.json( ctx.inventory.checkout(book, LocalDate.now().plusDays(10)))
+						ctx.json( ctx.inventory.checkout(book, dueDate) )
 					}
 					post("/book/:id/checkin",LibraryRole.Checkout) { ctx ->
 						val id = ctx.pathParam("id").toInt()
@@ -132,3 +140,6 @@ object JavalinApp {
 
 val Context.inventory:Inventory
 	get() = appAttribute(Inventory::class.java)
+
+val Context.user:User?
+	get() = sessionAttribute(User::class.java.canonicalName)

@@ -33,7 +33,9 @@ object KtorApp {
 
 		embeddedServer(factory=Jetty,port=port,host=host) {
 			install(ContentNegotiation) {
-				jackson()
+				jackson {
+					configure()
+				}
 			}
 			install(DefaultHeaders) {
 				header( name = "X-Powered-By", value = "Kotlinnight Library" )
@@ -43,6 +45,8 @@ object KtorApp {
 			install(Authentication) {
 				val provider = object:AuthenticationProvider("query-params") {}
 				provider.pipeline.intercept(AuthenticationPipeline.RequestAuthentication) { ctx ->
+					val call = ctx.call
+					val req = ctx.call.request
 					val username = ctx.call.request.queryParameters["user"]
 					if ( username != null ) {
 						val roles = setOf(Role.Read, Role.Checkout)
@@ -69,27 +73,27 @@ object KtorApp {
 						val isbn = call.parameters["isbn"]!!
 						call.respond( inventory.getTitle(isbn) ?: throw NotFoundException() )
 					}
-					get("/title/:isbn/checkouts",Role.Read) {
+					get("/title/{isbn}/checkouts",Role.Read) {
 						val isbn = call.parameters["isbn"]!!
 						call.respond( inventory.getCheckouts(isbn) )
 					}
 					get("/book/",Role.Read) {
 						call.respond( inventory.getBooks() )
 					}
-					get("/book/:id",Role.Read) {
+					get("/book/{id}",Role.Read) {
 						val id = call.parameters["id"]!!.toInt()
 						call.respond( inventory.getBook(id) ?: throw NotFoundException() )
 					}
-					get("/book/:id/checkout",Role.Checkout) {
+					get("/book/{id}/checkout",Role.Checkout) {
 						val id = call.parameters["id"]!!.toInt()
 						call.respond( inventory.getCheckout(id) ?: throw NotFoundException() )
 					}
-					post("/book/:id/checkout",Role.Checkout) {
+					post("/book/{id}/checkout",Role.Checkout) {
 						val id = call.parameters["id"]!!.toInt()
 						val book = inventory.getBook(id) ?: throw NotFoundException()
 						call.respond( inventory.checkout(book, LocalDate.now().plusDays(10)))
 					}
-					post("/book/:id/checkin",Role.Checkout) {
+					post("/book/{id}/checkin",Role.Checkout) {
 						val id = call.parameters["id"]!!.toInt()
 						val book = inventory.getBook(id) ?: throw NotFoundException()
 						inventory.checkin(book)
@@ -118,6 +122,7 @@ object KtorApp {
 			} else {
 				log.info( "User ${user?.name ?: "<none>"} does not have any of ${permittedRoles.joinToString(",")}" )
 				call.respond(HttpStatusCode.Forbidden)
+				return false
 			}
 		}
 		return true

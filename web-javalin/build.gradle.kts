@@ -3,6 +3,10 @@ plugins {
   kotlin("jvm")
 }
 
+application {
+  mainClassName = "io.mfj.kotlinnight.library.web.javalin.JavalinApp"
+}
+
 dependencies {
   implementation(kotlin("stdlib-jdk8"))
   compile(project(":common"))

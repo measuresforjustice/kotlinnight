@@ -1,13 +1,14 @@
 package io.mfj.kotlinnight.library.gui
 
 import io.mfj.kotlinnight.library.*
+import io.mfj.kotlinnight.library.fuel.FuelInventory
 
 import tornadofx.*
 import java.time.LocalDate
 
 class LibraryController:Controller() {
 
-	val inventory:Inventory = InventoryImpl
+	val inventory:Inventory = FuelInventory()
 
 	val titles = mutableListOf<Title>().observable()
 
