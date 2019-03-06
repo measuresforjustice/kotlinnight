@@ -1,5 +1,5 @@
 rootProject.name = "kotlinnight"
-include("common")
-include("web-javalin")
-include("web-ktor")
-include("gui")
+include("library-common")
+include("library-web-javalin")
+include("library-web-ktor")
+include("library-gui")
