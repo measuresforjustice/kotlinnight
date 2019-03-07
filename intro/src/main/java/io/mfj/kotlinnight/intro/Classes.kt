@@ -172,6 +172,18 @@ class SpecialRedSword:SpecialSword(Color.Red)
 class SpecialBlueSword:SpecialSword(Color.Blue)
 class SpecialGreenSword:SpecialSword(Color.Green)
 
+// varargs!
+class MultiColoredSword( val hiltColor:Color, vararg val bladeColors:Color ):Sword()
+
+// no "new"
+val sword1 = MultiColoredSword( Color.Red, Color.Blue, Color.Green )
+
+// named parameters
+val mySword = MultiColoredSword(
+		hiltColor = Color.Red,
+		bladeColors = *arrayOf( Color.Blue, Color.Green )
+)
+
 /* You may have noticed that we declared several classes here,
 none of which were called Classes. That's totally allowed.
 
