@@ -75,3 +75,22 @@ object InnerFunction {
 
 	}
 }
+
+// We can have a function that creates functions
+object FunctionCreateFunction {
+
+	fun go( a:String, b:String, creator:(a:String)->((b:String)->String) ): String {
+		return creator(a)(b)
+	}
+
+	@JvmStatic
+	fun main( args:Array<String> ) {
+		val result = go( "hello", "world" ) { a ->
+			{ b ->
+				"${a} ${b}"
+			}
+		}
+		println( result )
+	}
+
+}
