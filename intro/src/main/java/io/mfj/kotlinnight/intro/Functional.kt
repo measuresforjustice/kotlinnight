@@ -26,3 +26,23 @@ object Functional {
 	// let's make the body take a parameter and return something
 
 }
+
+// You can define functions in any scope
+object InnerFUnction{
+
+	@JvmStatic
+	fun main( args:Array<String> ) {
+
+		listOf( "Tom", "Dick","Harry", "Sally" ).forEach { name ->
+
+			fun say(text:String) {
+				println( "${name} said \"${text}\"" )
+			}
+
+			say("Hello")
+			say("Goodbye")
+
+		}
+
+	}
+}

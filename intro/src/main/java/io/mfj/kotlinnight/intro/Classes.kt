@@ -196,3 +196,5 @@ with comments. This is super nice.
 
  */
 // The comment ended there
+
+// Let's take a look at collections

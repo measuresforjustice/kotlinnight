@@ -1,19 +1,27 @@
 package io.mfj.kotlinnight.intro
 
-// Objects are like static classes
-object CollectionsIntro {
+// Kotlin has its own set of collections that (in most cases) wrap the ones in java.util.
+// They can be mutable or immutable.
+// Immutability is important for functional programming.
 
-	// Kotlin has its own set of collections that (in most cases) wrap the ones in java.util.
-	// They can be mutable or immutable.
-	// Immutability is important for functional programming.
+// (Objects are singletons classes)
+object CollectionsIntro {
 
 	val someStuff = listOf( "a", "b", 0 )
 	// someStuff is mutable.
 	// what is the type? (show hints)
 
-	fun test() {
+	@JvmStatic
+	fun main( args:Array<String> ) {
 		val thisCanChange = mutableListOf("a", "b", "c")
-		thisCanChange.plus("d")
+		thisCanChange.add("d")
+
+		//someStuff.add("d")
+
+		val someStuffPlusD = someStuff.plus("d")
+		for ( x in someStuffPlusD ) {
+			println(x)
+		}
 	}
 
 	val aMap:Map<String,Int> = mapOf( "a" to 1, "b" to 2, "c" to 3 )
