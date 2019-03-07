@@ -32,4 +32,26 @@ object SAM {
 
 	}
 
+	// You can only do SAM conversions with Java interfaces.
+	// If you want to use a lambda when calling a Kotlin function, use first class functions.
+	// Type aliases can make this look nicer
+
+}
+
+typealias Handler = (Int)->Int
+
+object TypeAliasExample {
+
+	@JvmStatic
+	fun main( args:Array<String> ) {
+		handle { i ->
+			i * 2
+		}
+	}
+
+	fun handle( handler:Handler ) {
+		(0 until 2).forEach {
+			println( "${handler(it)}" )
+		}
+	}
 }
